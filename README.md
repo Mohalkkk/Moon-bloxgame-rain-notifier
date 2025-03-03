@@ -10,6 +10,6 @@ A tool to provide a notification when bloxgame has an active rain
 - Install required libraries
   - npm i discord.js
   - npm i ws
-- Add your channel & role id, Bot token
+- Add your channel & role id and bot token
 - Host the application somewhere through (node rain.js)
 - Enjoy!
