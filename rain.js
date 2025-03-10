@@ -17,6 +17,7 @@ const client = new Client({
 });
 
 let onlineUsers;
+let ws;
 
 client.once('ready', async () => {
     console.log('Rain notifier is running');
@@ -55,7 +56,11 @@ client.once('ready', async () => {
         console.log('Channel not found');
     }
 
-    const ws = new WebSocket(WS_URL, {
+    connectWebSocket();
+});
+
+function connectWebSocket() {
+    ws = new WebSocket(WS_URL, {
         headers: {
             'origin': 'https://bloxgame.com',
         }
@@ -99,13 +104,17 @@ client.once('ready', async () => {
     });
 
     ws.on('close', () => {
-        console.log('WebSocket connection closed');
+        console.log('WebSocket connection closed, attempting to reconnect...');
+        setTimeout(() => {
+            connectWebSocket();
+        }, 5000); 
     });
 
     ws.on('error', (error) => {
         console.error('WebSocket error:', error);
+        ws.close(); 
     });
-});
+}
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isButton()) return;
